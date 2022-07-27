@@ -748,18 +748,24 @@ extension DropDown {
 
 		let x = anchorViewX + topOffset.x
 		var y = (anchorViewMaxY + topOffset.y) - tableHeight
+	       var windowYAix = window.bounds.minY
 
-		let windowY = window.bounds.minY + DPDConstant.UI.HeightPadding
+	       if #available(iOS 11.0, *) {
+		   windowYAix = window.safeAreaInsets.top
+	       } else {
+		   // Fallback on earlier versions
+	       }
+		let windowY = windowYAix + DPDConstant.UI.HeightPadding
 
 		if y < windowY {
 			offscreenHeight = abs(y - windowY)
 			y = windowY
 		}
-		
+
 		let width = self.width ?? (anchorView?.plainView.bounds.width ?? fittingWidth()) - topOffset.x
-		
+
 		return (x, y, width, offscreenHeight)
-	}
+	   }
 	
 	fileprivate func fittingWidth() -> CGFloat {
 		if templateCell == nil {
